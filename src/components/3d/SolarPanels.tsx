@@ -1,6 +1,10 @@
 "use client";
 
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import type { Group } from "three";
 import { LAYOUT, radial } from "@/lib/constants/layout";
+import { pointer } from "@/lib/input/pointer";
 import { HullMesh } from "./HullMesh";
 import { Span } from "./Span";
 import { useStationAssets } from "./stationAssets";
@@ -49,10 +53,17 @@ function Wing({ side }: { side: 1 | -1 }) {
 }
 
 export function SolarPanels() {
+  const panels = useRef<Group>(null);
   const { geometries, materials } = useStationAssets();
 
+  useFrame(() => {
+    if (!panels.current) return;
+    panels.current.rotation.z = pointer.x * -0.02;
+    panels.current.rotation.x = pointer.y * 0.012;
+  });
+
   return (
-    <group name="SOLAR">
+    <group ref={panels} name="SOLAR">
       <Wing side={1} />
       <Wing side={-1} />
       <Span

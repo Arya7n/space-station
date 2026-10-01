@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { SCENE } from "@/lib/constants/scene";
+import { pointer } from "@/lib/input/pointer";
 import { useStationStore } from "@/store/stationStore";
 
 const vertexShader = /* glsl */ `
@@ -100,9 +101,12 @@ export function StarField() {
   }, [geometry, material]);
 
   useFrame((_, delta) => {
-    if (!group.current || useStationStore.getState().reducedMotion) return;
-    elapsed.current += delta;
-    group.current.rotation.y = elapsed.current * 0.004;
+    if (!group.current) return;
+    if (!useStationStore.getState().reducedMotion) {
+      elapsed.current += delta;
+    }
+    group.current.rotation.y = elapsed.current * 0.004 + pointer.x * 0.018;
+    group.current.rotation.x = pointer.y * 0.01;
   });
 
   return (

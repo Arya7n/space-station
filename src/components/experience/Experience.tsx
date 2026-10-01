@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePointerInput } from "@/hooks/usePointerInput";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 function SceneFallback() {
@@ -20,5 +21,6 @@ const SpaceScene = dynamic(
 
 export function Experience() {
   useReducedMotion();
+  usePointerInput();
   return <SpaceScene />;
 }

@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { SCENE } from "@/lib/constants/scene";
 import { CameraRig } from "@/components/camera/CameraRig";
+import { PointerSmoother } from "@/components/camera/PointerSmoother";
 import { Debris } from "./Debris";
 import { Earth } from "./Earth";
 import { Nebula } from "./Nebula";
@@ -35,6 +36,7 @@ export function SpaceScene() {
           gl.toneMappingExposure = 1.02;
         }}
       >
+        <PointerSmoother />
         <SceneLights />
         <StarField />
         <Nebula />

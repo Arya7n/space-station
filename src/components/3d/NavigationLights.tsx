@@ -53,6 +53,7 @@ export function NavigationLights() {
       />
       <mesh
         ref={beaconMesh}
+        name="beacon"
         geometry={geometries.nav}
         material={beaconMaterial}
         position={POSITION.beacon}

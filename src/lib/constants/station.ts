@@ -45,3 +45,13 @@ export const INITIAL_TELEMETRY: Telemetry = {
   velocity: 7.66,
   reactorOutput: 91.5,
 };
+
+export const FAILURE_TELEMETRY: Telemetry = {
+  power: 24,
+  oxygen: 71,
+  hull: 82,
+  temperature: 27.8,
+  fuel: 61.4,
+  velocity: 7.52,
+  reactorOutput: 36,
+};

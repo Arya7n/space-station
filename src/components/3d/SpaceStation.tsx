@@ -30,7 +30,7 @@ export function SpaceStation() {
 
   return (
     <StationAssetProvider>
-      <group ref={parallax}>
+      <group ref={parallax} name="STATION">
         <group ref={spin}>
           <StationCore>
             <QuarterPods />

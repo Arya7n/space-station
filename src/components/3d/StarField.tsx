@@ -76,10 +76,10 @@ function createStarField(count: number) {
   return geometry;
 }
 
-export function StarField() {
+export function StarField({ count = SCENE.starCount }: { count?: number }) {
   const group = useRef<THREE.Group>(null);
   const elapsed = useRef(0);
-  const geometry = useMemo(() => createStarField(SCENE.starCount), []);
+  const geometry = useMemo(() => createStarField(count), [count]);
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({

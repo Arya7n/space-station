@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useMemo } from "react";
+import * as THREE from "three";
 import { ORIENT, POSITION } from "@/lib/constants/layout";
 import { DockingPort } from "./DockingPort";
 import { HullMesh } from "./HullMesh";
@@ -91,6 +93,18 @@ function LabModule() {
 
 function EngineeringModule() {
   const { geometries, materials } = useStationAssets();
+  const emergency = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: "#3a2a28",
+        emissive: "#8a4538",
+        emissiveIntensity: 0.45,
+        roughness: 0.46,
+      }),
+    [],
+  );
+
+  useEffect(() => () => emergency.dispose(), [emergency]);
 
   return (
     <group name="ENGINEERING">
@@ -124,6 +138,13 @@ function EngineeringModule() {
           material={materials.dark}
           position={[1.15, -0.7, 0.2]}
           scale={[0.08, 1.15, 0.08]}
+        />
+        <mesh
+          name="emergency-button"
+          geometry={geometries.unitBox}
+          material={emergency}
+          position={[0.35, 0.35, 1.68]}
+          scale={[0.22, 0.22, 0.1]}
         />
       </group>
       <DockingPort

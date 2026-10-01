@@ -66,7 +66,7 @@ const atmosphereFragment = /* glsl */ `
   }
 `;
 
-export function Earth() {
+export function Earth({ detail = "high" }: { detail?: "high" | "low" }) {
   const earth = useRef<THREE.Mesh>(null);
   const clouds = useRef<THREE.Mesh>(null);
   const spin = useRef(0);
@@ -135,7 +135,13 @@ export function Earth() {
   return (
     <group position={SCENE.earthPosition}>
       <mesh ref={earth} material={surface}>
-        <sphereGeometry args={[SCENE.earthRadius, 64, 48]} />
+        <sphereGeometry
+          args={[
+            SCENE.earthRadius,
+            detail === "high" ? 64 : 32,
+            detail === "high" ? 48 : 24,
+          ]}
+        />
       </mesh>
       <mesh ref={clouds} material={cloudMaterial}>
         <sphereGeometry args={[SCENE.earthRadius * 1.012, 48, 32]} />

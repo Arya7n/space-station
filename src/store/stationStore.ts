@@ -6,12 +6,24 @@ import {
   type StationMode,
   type Telemetry,
 } from "@/lib/constants/station";
+import type { QualityTier } from "@/lib/quality";
 
 export type InteractionState = {
   selectedObject: string | null;
   scanActive: boolean;
   emergencyActive: boolean;
 };
+
+export type GameState = {
+  active: boolean;
+  score: number;
+  remaining: number;
+};
+
+export type FailureState = {
+  stage: "warning" | "reboot" | "restored";
+  count: number;
+} | null;
 
 type StationState = {
   mode: StationMode;
@@ -22,6 +34,17 @@ type StationState = {
   audioMuted: boolean;
   reducedMotion: boolean;
   webglAvailable: boolean;
+  booted: boolean;
+  standardMode: boolean;
+  quality: QualityTier;
+  hint: string;
+  projectId: string | null;
+  onlineSystems: string[];
+  secrets: string[];
+  reactorStrikes: number;
+  game: GameState;
+  failure: FailureState;
+  log: string[];
   setMode: (mode: StationMode) => void;
   setModule: (currentModule: ModuleId | null) => void;
   setCameraState: (cameraState: CameraState) => void;
@@ -30,7 +53,20 @@ type StationState = {
   setAudioMuted: (audioMuted: boolean) => void;
   setReducedMotion: (reducedMotion: boolean) => void;
   setWebglAvailable: (webglAvailable: boolean) => void;
+  setBooted: (booted: boolean) => void;
+  setStandardMode: (standardMode: boolean) => void;
+  setQuality: (quality: QualityTier) => void;
+  setHint: (hint: string) => void;
+  setProjectId: (projectId: string | null) => void;
+  toggleSystem: (id: string, line: string) => void;
+  addSecret: (secret: string) => void;
+  setReactorStrikes: (reactorStrikes: number) => void;
+  setGame: (game: GameState) => void;
+  setFailure: (failure: FailureState) => void;
+  pushLog: (line: string) => void;
 };
+
+const idleGame: GameState = { active: false, score: 0, remaining: 0 };
 
 export const useStationStore = create<StationState>((set) => ({
   mode: "NORMAL",
@@ -45,6 +81,17 @@ export const useStationStore = create<StationState>((set) => ({
   audioMuted: true,
   reducedMotion: false,
   webglAvailable: true,
+  booted: false,
+  standardMode: false,
+  quality: "high",
+  hint: "",
+  projectId: null,
+  onlineSystems: [],
+  secrets: [],
+  reactorStrikes: 0,
+  game: idleGame,
+  failure: null,
+  log: ["STATION LINK ESTABLISHED"],
   setMode: (mode) => set({ mode }),
   setModule: (currentModule) => set({ currentModule }),
   setCameraState: (cameraState) => set({ cameraState }),
@@ -55,4 +102,34 @@ export const useStationStore = create<StationState>((set) => ({
   setAudioMuted: (audioMuted) => set({ audioMuted }),
   setReducedMotion: (reducedMotion) => set({ reducedMotion }),
   setWebglAvailable: (webglAvailable) => set({ webglAvailable }),
+  setBooted: (booted) => set({ booted }),
+  setStandardMode: (standardMode) => set({ standardMode }),
+  setQuality: (quality) => set({ quality }),
+  setHint: (hint) => set({ hint }),
+  setProjectId: (projectId) => set({ projectId }),
+  toggleSystem: (id, line) =>
+    set((state) => {
+      const online = state.onlineSystems.includes(id)
+        ? state.onlineSystems
+        : [...state.onlineSystems, id];
+      return {
+        onlineSystems: online,
+        log: [line, ...state.log].slice(0, 12),
+        hint: line,
+      };
+    }),
+  addSecret: (secret) =>
+    set((state) => {
+      if (state.secrets.includes(secret)) return { hint: secret };
+      return {
+        secrets: [...state.secrets, secret],
+        log: [secret, ...state.log].slice(0, 12),
+        hint: secret,
+      };
+    }),
+  setReactorStrikes: (reactorStrikes) => set({ reactorStrikes }),
+  setGame: (game) => set({ game }),
+  setFailure: (failure) => set({ failure }),
+  pushLog: (line) =>
+    set((state) => ({ log: [line, ...state.log].slice(0, 12) })),
 }));

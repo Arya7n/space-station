@@ -39,7 +39,10 @@ export function Reactor() {
 
   return (
     <group position={POSITION.reactor} name="REACTOR">
-      <HullMesh geometry={geometries.reactorHousing} material={materials.dark} />
+      <HullMesh
+        geometry={geometries.reactorHousing}
+        material={materials.dark}
+      />
       <mesh
         ref={coreMesh}
         geometry={geometries.reactorCore}

@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { SCENE } from "@/lib/constants/scene";
 import { CameraRig } from "@/components/camera/CameraRig";
+import { Debris } from "./Debris";
 import { Earth } from "./Earth";
 import { Nebula } from "./Nebula";
 import { SceneLights } from "./SceneLights";
@@ -15,7 +16,7 @@ export function SpaceScene() {
     <div className="absolute inset-0">
       <Canvas
         dpr={SCENE.dpr}
-        shadows
+        shadows="percentage"
         camera={{
           fov: SCENE.cameraFov,
           near: 0.1,
@@ -38,6 +39,7 @@ export function SpaceScene() {
         <StarField />
         <Nebula />
         <Earth />
+        <Debris />
         <SpaceStation />
         <CameraRig />
       </Canvas>

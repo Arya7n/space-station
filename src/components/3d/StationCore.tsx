@@ -5,6 +5,7 @@ import { useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
 import { SPOKE_ANGLES, radial } from "@/lib/constants/layout";
 import { useStationStore } from "@/store/stationStore";
+import { ChaseLights } from "./ChaseLights";
 import { HullMesh } from "./HullMesh";
 import { useStationAssets } from "./stationAssets";
 
@@ -73,6 +74,7 @@ export function StationCore({ children }: { children?: ReactNode }) {
           material={materials.hull}
           rotation={[Math.PI / 2, 0, 0]}
         />
+        <ChaseLights />
         {spokes.map((spoke) => (
           <HullMesh
             key={spoke.angle}

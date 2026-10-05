@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { APPROACH_SHOT } from "@/lib/animations/cameraShots";
 import { SCENE } from "@/lib/constants/scene";
@@ -20,14 +20,22 @@ import { StationInteractions } from "./StationInteractions";
 
 export function SpaceScene() {
   const tier = useMemo(() => detectQuality(), []);
+  const [pageHidden, setPageHidden] = useState(false);
 
   useEffect(() => {
     useStationStore.getState().setQuality(tier);
   }, [tier]);
 
+  useEffect(() => {
+    const onVisibility = () => setPageHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
   return (
     <div className="absolute inset-0">
       <Canvas
+        frameloop={pageHidden ? "demand" : "always"}
         dpr={tier === "high" ? SCENE.dpr : [1, 1.1]}
         shadows={tier === "high" ? "percentage" : false}
         camera={{

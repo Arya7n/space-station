@@ -39,6 +39,7 @@ type StationState = {
   quality: QualityTier;
   hint: string;
   hovered: string;
+  helpOpen: boolean;
   projectId: string | null;
   onlineSystems: string[];
   secrets: string[];
@@ -60,6 +61,7 @@ type StationState = {
   setQuality: (quality: QualityTier) => void;
   setHint: (hint: string) => void;
   setHovered: (hovered: string) => void;
+  setHelpOpen: (helpOpen: boolean) => void;
   setProjectId: (projectId: string | null) => void;
   toggleSystem: (id: string, line: string) => void;
   addSecret: (secret: string) => void;
@@ -90,6 +92,7 @@ export const useStationStore = create<StationState>((set) => ({
   quality: "high",
   hint: "",
   hovered: "",
+  helpOpen: false,
   projectId: null,
   onlineSystems: [],
   secrets: [],
@@ -113,6 +116,7 @@ export const useStationStore = create<StationState>((set) => ({
   setQuality: (quality) => set({ quality }),
   setHint: (hint) => set({ hint }),
   setHovered: (hovered) => set({ hovered }),
+  setHelpOpen: (helpOpen) => set({ helpOpen }),
   setProjectId: (projectId) => set({ projectId }),
   toggleSystem: (id, line) =>
     set((state) => {

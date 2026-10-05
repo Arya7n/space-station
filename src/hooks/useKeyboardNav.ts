@@ -29,7 +29,16 @@ export function useKeyboardNav() {
       }
 
       const state = useStationStore.getState();
+      if (event.key === "?" || (event.key === "/" && event.shiftKey)) {
+        state.setHelpOpen(!state.helpOpen);
+        return;
+      }
+
       if (event.key === "Escape") {
+        if (state.helpOpen) {
+          state.setHelpOpen(false);
+          return;
+        }
         if (state.projectId) {
           state.setProjectId(null);
           return;

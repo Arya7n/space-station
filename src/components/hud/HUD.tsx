@@ -5,6 +5,7 @@ import { audio } from "@/lib/audio/audioManager";
 import { STATION_DESIGNATION, STATION_NAME } from "@/lib/constants/station";
 import { returnToSpace } from "@/hooks/useStationNavigation";
 import { useStationStore } from "@/store/stationStore";
+import { HelpOverlay } from "./HelpOverlay";
 import { InteractionHint } from "./InteractionHint";
 import { MissionClock } from "./MissionClock";
 import { SystemStatus } from "./SystemStatus";
@@ -16,6 +17,8 @@ export function HUD() {
   const failed = useStationStore((state) => state.mode === "FAILURE");
   const standard = useStationStore((state) => state.standardMode);
   const cameraState = useStationStore((state) => state.cameraState);
+  const helpOpen = useStationStore((state) => state.helpOpen);
+  const setHelpOpen = useStationStore((state) => state.setHelpOpen);
   const setAudioMuted = useStationStore((state) => state.setAudioMuted);
   const setStandardMode = useStationStore((state) => state.setStandardMode);
 
@@ -45,6 +48,8 @@ export function HUD() {
         <Telemetry />
       </div>
 
+      <HelpOverlay />
+
       <div className="absolute top-1/2 left-1/2 w-[min(36rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2">
         <InteractionHint />
       </div>
@@ -61,6 +66,14 @@ export function HUD() {
               RETURN
             </button>
           ) : null}
+          <button
+            type="button"
+            className="border-line text-muted hover:text-foreground border px-2 py-1 font-mono text-[10px] tracking-[0.16em]"
+            aria-expanded={helpOpen}
+            onClick={() => setHelpOpen(!helpOpen)}
+          >
+            HELP
+          </button>
           <button
             type="button"
             className="border-line text-muted hover:text-foreground border px-2 py-1 font-mono text-[10px] tracking-[0.16em]"

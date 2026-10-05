@@ -26,7 +26,7 @@ export function useTelemetry() {
       if (now - last < 320) return;
       last = now;
       const state = useStationStore.getState();
-      if (state.mode === "FAILURE") return;
+      if (state.mode === "FAILURE" || document.hidden) return;
 
       KEYS.forEach((key) => {
         if (Math.random() > 0.4) return;
@@ -36,11 +36,13 @@ export function useTelemetry() {
       });
 
       const next = { ...state.telemetry };
+      let changed = false;
       KEYS.forEach((key) => {
-        const value = next[key] + (targets[key] - next[key]) * 0.45;
-        next[key] = Math.round(value * 10) / 10;
+        const value = Math.round((next[key] + (targets[key] - next[key]) * 0.45) * 10) / 10;
+        if (value !== next[key]) changed = true;
+        next[key] = value;
       });
-      state.setTelemetry(next);
+      if (changed) state.setTelemetry(next);
     };
 
     frame = window.requestAnimationFrame(tick);

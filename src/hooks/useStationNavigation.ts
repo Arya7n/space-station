@@ -39,6 +39,7 @@ export function openModule(moduleId: ModuleId) {
   if (!spatial()) {
     state.setModule(moduleId);
     state.setCameraState("MODULE");
+    state.markVisited(moduleId);
     return;
   }
   state.setCameraState("APPROACH");
@@ -46,6 +47,7 @@ export function openModule(moduleId: ModuleId) {
     const next = useStationStore.getState();
     next.setModule(moduleId);
     next.setCameraState("MODULE");
+    next.markVisited(moduleId);
   });
 }
 

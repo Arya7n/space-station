@@ -25,6 +25,7 @@ const DESTINATIONS: { id: ModuleId; label: string }[] = [
 export function CommandCenter() {
   const [tab, setTab] = useState<Tab>("MISSION");
   const log = useStationStore((state) => state.log);
+  const visited = useStationStore((state) => state.visited);
   const mode = useStationStore((state) => state.mode);
   const telemetry = useStationStore((state) => state.telemetry);
 
@@ -88,6 +89,7 @@ export function CommandCenter() {
                 onClick={() => openModule(destination.id)}
               >
                 {destination.label}
+                {visited.includes(destination.id) ? "  ·" : ""}
               </Button>
             ))}
             <Button onClick={startDefense}>ASTEROID DEFENSE</Button>

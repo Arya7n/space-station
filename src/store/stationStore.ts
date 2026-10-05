@@ -45,6 +45,7 @@ type StationState = {
   game: GameState;
   failure: FailureState;
   log: string[];
+  visited: ModuleId[];
   setMode: (mode: StationMode) => void;
   setModule: (currentModule: ModuleId | null) => void;
   setCameraState: (cameraState: CameraState) => void;
@@ -64,6 +65,7 @@ type StationState = {
   setGame: (game: GameState) => void;
   setFailure: (failure: FailureState) => void;
   pushLog: (line: string) => void;
+  markVisited: (moduleId: ModuleId) => void;
 };
 
 const idleGame: GameState = { active: false, score: 0, remaining: 0 };
@@ -92,6 +94,7 @@ export const useStationStore = create<StationState>((set) => ({
   game: idleGame,
   failure: null,
   log: ["STATION LINK ESTABLISHED"],
+  visited: [],
   setMode: (mode) => set({ mode }),
   setModule: (currentModule) => set({ currentModule }),
   setCameraState: (cameraState) => set({ cameraState }),
@@ -132,4 +135,10 @@ export const useStationStore = create<StationState>((set) => ({
   setFailure: (failure) => set({ failure }),
   pushLog: (line) =>
     set((state) => ({ log: [line, ...state.log].slice(0, 12) })),
+  markVisited: (moduleId) =>
+    set((state) =>
+      state.visited.includes(moduleId)
+        ? state
+        : { visited: [...state.visited, moduleId] },
+    ),
 }));

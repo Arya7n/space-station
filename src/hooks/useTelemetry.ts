@@ -38,7 +38,8 @@ export function useTelemetry() {
       const next = { ...state.telemetry };
       let changed = false;
       KEYS.forEach((key) => {
-        const value = Math.round((next[key] + (targets[key] - next[key]) * 0.45) * 10) / 10;
+        const value =
+          Math.round((next[key] + (targets[key] - next[key]) * 0.45) * 10) / 10;
         if (value !== next[key]) changed = true;
         next[key] = value;
       });

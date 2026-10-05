@@ -44,13 +44,14 @@ export function StationInteractions() {
       ndc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       ndc.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(ndc, camera);
-      const hits = raycaster.intersectObjects(scene.children, true);
-      const hit = hits.find(
-        (item) =>
-          !(item.object instanceof THREE.Points) &&
-          !(item.object instanceof THREE.Sprite),
-      );
-      return namedAncestor(hit?.object ?? null);
+      const roots: THREE.Object3D[] = [];
+      const station = scene.getObjectByName("STATION");
+      const threats = scene.getObjectByName("THREATS");
+      if (station) roots.push(station);
+      if (threats) roots.push(threats);
+      if (roots.length === 0) return "";
+      const hits = raycaster.intersectObjects(roots, true);
+      return namedAncestor(hits[0]?.object ?? null);
     };
 
     const publish = (name: string) => {

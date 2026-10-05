@@ -8,6 +8,7 @@ import { HUD } from "@/components/hud/HUD";
 import { ModuleOverlay } from "@/components/modules/ModuleOverlay";
 import { StandardMode } from "@/components/modules/StandardMode";
 import { useKeyboardNav } from "@/hooks/useKeyboardNav";
+import { usePersistedPreferences } from "@/hooks/usePersistedPreferences";
 import { usePointerInput } from "@/hooks/usePointerInput";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useTelemetry } from "@/hooks/useTelemetry";
@@ -34,6 +35,7 @@ export function Experience() {
   usePointerInput();
   useTelemetry();
   useKeyboardNav();
+  usePersistedPreferences();
   useWebglCapability();
   const standard = useStationStore((state) => state.standardMode);
   const webgl = useStationStore((state) => state.webglAvailable);

@@ -11,6 +11,7 @@ import { PointerSmoother } from "@/components/camera/PointerSmoother";
 import { AsteroidDefense } from "@/components/games/AsteroidDefense";
 import { useStationStore } from "@/store/stationStore";
 import { Debris } from "./Debris";
+import { FrameBudget } from "./FrameBudget";
 import { Earth } from "./Earth";
 import { Nebula } from "./Nebula";
 import { SceneLights } from "./SceneLights";
@@ -19,12 +20,14 @@ import { StarField } from "./StarField";
 import { StationInteractions } from "./StationInteractions";
 
 export function SpaceScene() {
-  const tier = useMemo(() => detectQuality(), []);
+  const detected = useMemo(() => detectQuality(), []);
+  const storedTier = useStationStore((state) => state.quality);
+  const tier = detected === "low" || storedTier === "low" ? "low" : "high";
   const [pageHidden, setPageHidden] = useState(false);
 
   useEffect(() => {
-    useStationStore.getState().setQuality(tier);
-  }, [tier]);
+    useStationStore.getState().setQuality(detected);
+  }, [detected]);
 
   useEffect(() => {
     const onVisibility = () => setPageHidden(document.hidden);
@@ -57,6 +60,7 @@ export function SpaceScene() {
         }}
       >
         <PointerSmoother />
+        <FrameBudget />
         <SceneLights />
         <StarField count={tier === "high" ? SCENE.starCount : 1600} />
         <Nebula />

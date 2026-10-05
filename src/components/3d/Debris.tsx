@@ -56,10 +56,11 @@ export function Debris() {
 
   useFrame((_, delta) => {
     if (!mesh.current) return;
-    const frozen = useStationStore.getState().reducedMotion;
+    const state = useStationStore.getState();
+    if (state.reducedMotion || state.cameraState === "MODULE") return;
 
     pieces.forEach((piece, index) => {
-      if (!frozen) piece.angle += delta * piece.speed;
+      piece.angle += delta * piece.speed;
       dummy.position.set(
         Math.cos(piece.angle) * piece.orbit,
         piece.y + Math.sin(piece.angle * 2) * 0.35,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { CONTACT } from "@/data/contact";
 import { audio } from "@/lib/audio/audioManager";
 import { useStationStore } from "@/store/stationStore";
@@ -8,7 +8,23 @@ import { Button } from "@/components/ui/Button";
 
 export function Communications() {
   const [status, setStatus] = useState("");
+  const [carrier, setCarrier] = useState(0);
+  const [burst, setBurst] = useState(0);
   const pushLog = useStationStore((state) => state.pushLog);
+  const reducedMotion = useStationStore((state) => state.reducedMotion);
+
+  useEffect(() => {
+    if (burst === 0 || carrier >= 4 || reducedMotion) return;
+    const id = window.setTimeout(() => {
+      setCarrier((value) => Math.min(4, value + 1));
+    }, 160);
+    return () => window.clearTimeout(id);
+  }, [burst, carrier, reducedMotion]);
+
+  useEffect(() => {
+    if (burst === 0 || carrier < 4) return;
+    pushLog("CARRIER LOCK — SIGNAL 4/4");
+  }, [burst, carrier, pushLog]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,6 +33,8 @@ export function Communications() {
     if (!message) return;
     audio.play("confirm");
     setStatus("MESSAGE QUEUED — LOCAL BUFFER");
+    setBurst((value) => value + 1);
+    setCarrier(reducedMotion ? 4 : 1);
     pushLog("OUTBOUND MESSAGE QUEUED");
     event.currentTarget.reset();
   };
@@ -54,6 +72,20 @@ export function Communications() {
           <p className="text-accent font-mono text-[10px] tracking-[0.14em]">
             {status}
           </p>
+        ) : null}
+        {carrier > 0 ? (
+          <div
+            className="flex items-end gap-1"
+            aria-label={`Carrier strength ${Math.min(carrier, 4)} of 4`}
+          >
+            {[1, 2, 3, 4].map((level) => (
+              <span
+                key={level}
+                className={`w-1 ${level <= carrier ? "bg-accent" : "bg-line"}`}
+                style={{ height: `${4 + level * 3}px` }}
+              />
+            ))}
+          </div>
         ) : null}
       </form>
       <div className="flex flex-col gap-2">

@@ -6,6 +6,7 @@ import { STATION_DESIGNATION, STATION_NAME } from "@/lib/constants/station";
 import { returnToSpace } from "@/hooks/useStationNavigation";
 import { useStationStore } from "@/store/stationStore";
 import { InteractionHint } from "./InteractionHint";
+import { MissionClock } from "./MissionClock";
 import { SystemStatus } from "./SystemStatus";
 import { Telemetry } from "./Telemetry";
 
@@ -39,6 +40,7 @@ export function HUD() {
           <p className="text-muted mt-2 font-mono text-[10px] tracking-[0.16em]">
             {STATION_DESIGNATION}
           </p>
+          <MissionClock />
         </div>
         <Telemetry />
       </div>

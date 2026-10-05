@@ -58,6 +58,7 @@ export function StationInteractions() {
       if (name === hovered) return;
       hovered = name;
       const state = useStationStore.getState();
+      state.setHovered(name);
       if (state.game.active || state.mode === "FAILURE") return;
       state.setHint(LABELS[name] ?? "");
     };

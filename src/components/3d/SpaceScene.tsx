@@ -13,6 +13,7 @@ import { useStationStore } from "@/store/stationStore";
 import { Debris } from "./Debris";
 import { FrameBudget } from "./FrameBudget";
 import { Earth } from "./Earth";
+import { HoverMarker } from "./HoverMarker";
 import { Nebula } from "./Nebula";
 import { SceneLights } from "./SceneLights";
 import { SpaceStation } from "./SpaceStation";
@@ -69,6 +70,7 @@ export function SpaceScene() {
         <SpaceStation />
         <AsteroidDefense />
         <StationInteractions />
+        <HoverMarker />
         <CameraRig />
       </Canvas>
     </div>
